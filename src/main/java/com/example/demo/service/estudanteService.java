@@ -7,13 +7,15 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.estudante;
 
+@Service
 public class estudanteService {
     private static Map<Long, estudante> listaEstudantes = new HashMap<>();
     
-    private ResponseEntity<estudante> buscarEstudantePorId(Long id) {
+    public ResponseEntity<estudante> buscarEstudantePorId(Long id) {
         estudante estudante = listaEstudantes.get(id);
         if (estudante == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -21,19 +23,16 @@ public class estudanteService {
         return ResponseEntity.status(HttpStatus.OK).body(estudante);
     }
 
-    private List<estudante> buscarTodosEstudantes() {
+    public List<estudante> buscarTodosEstudantes() {
         return new ArrayList<>(listaEstudantes.values());
     }
 
-    private ResponseEntity<estudante> cadastrarEstudante(estudante estudante) {
-        estudante estudanteEncontrado = listaEstudantes.get(estudante.getId());
-        if (estudanteEncontrado == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(estudanteEncontrado);
+    public ResponseEntity<estudante> cadastrarEstudante(estudante estudante) {
+        listaEstudantes.put(estudante.getId(), estudante);
+        return ResponseEntity.status(HttpStatus.OK).body(estudante);
     }
 
-    private ResponseEntity<estudante> atualizarEstudante(estudante estudante) {
+    public ResponseEntity<estudante> atualizarEstudante(estudante estudante) {
         estudante estudanteEncontrado = listaEstudantes.get(estudante.getId());
         if (estudanteEncontrado == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -42,7 +41,7 @@ public class estudanteService {
         return ResponseEntity.status(HttpStatus.OK).body(estudanteEncontrado);
     }
 
-    private ResponseEntity<String> deletarEstudante(Long id) {
+    public ResponseEntity<String> removerEstudante(Long id) {
         estudante estudanteEncontrado = listaEstudantes.get(id);
         if (estudanteEncontrado == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
